@@ -143,7 +143,7 @@ sub _send {
 
         my $req = sprintf( "%s%s", _lE2bE( length($request) + 4 ), $request );
         print $client $req;
-
+	$client->flush();
         my $stream;
         my $read;
         my $length = 0;
