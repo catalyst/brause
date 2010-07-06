@@ -141,7 +141,7 @@ sub _send {
             print "----------\n";
         }
 
-        my $req = sprintf( "%s%s", _lE2bE( length($request) + 4 ), $request );
+        my $req = sprintf( "%s%s", pack("N", length($request) + 4 ), $request );
         print $client $req;
 	$client->flush();
         my $stream;
@@ -170,25 +170,6 @@ sub _send {
         push( @response, $stream );
     }
     return { greet => $greet, response => \@response };
-}
-
-=head2 _lE2bE
-
-This internal function converts little endian to big endian as network
-byte order as defined in the EPP RFCs is normally not what we have on a
-machine running this code base.
-
-=cut
-
-sub _lE2bE {
-    my $number = shift;
-    my ( $c, @numbers ) = (0);
-    for ( my $c = 0 ; $c < 4 ; ++$c ) {
-        push @numbers, $number % 256;
-        $number >>= 8;
-    }
-    return
-      sprintf( "%c%c%c%c", $numbers[3], $numbers[2], $numbers[1], $numbers[0] );
 }
 
 =head1 AUTHOR
